@@ -90,5 +90,5 @@ rm -f $TMP
 while :
 do
     sleep 2
-    printf $($0)
+    echo $($0)
 done
