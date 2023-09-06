@@ -89,6 +89,6 @@ do
 
     # Delete temp-file
     rm -f $TMP
-    [ ! -v $1 ] && exit 0
+    [ $# -eq 0 ] && exit 0
     sleep $1
 done
