@@ -11,7 +11,7 @@
 # OPTIONS: N/A
 #
 # Modifications (version | date | author | what):
-# 0 | 2023-08-30 | Niklas Hook | Creation
+# 0 | 2023-09-06 | Niklas Hook | Creation
 ########################################################################
 
 # Define constants
@@ -86,9 +86,3 @@ fi
 
 # Delete temp-file
 rm -f $TMP
-
-while :
-do
-    sleep 2
-    echo $($0)
-done
