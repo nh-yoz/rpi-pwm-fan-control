@@ -3,7 +3,7 @@ import RPi.GPIO as GPIO
 import time
 
 # Pin configuration
-TACH = 24       # Fan's tachometer output pin
+TACH = 23       # Fan's tachometer output pin
 PULSE = 2       # Noctua fans puts out two pluses per revolution
 WAIT_TIME = 1   # [s] Time to wait between each refresh
 
