@@ -15,23 +15,35 @@ ExitNull() {
 }
 
 GetNext() { # Loops until GPIO is in state given by $1 (exit 0) or TimeOut (exit 1) 
-    T0=$(date +%s%N)
-    T1=$T0
-    while [ "$(echo "$T1-$T0<$TIMEOUT" | bc)" -eq 1 ]
+#    T0=$(date +%s%N)
+#    T1=$T0
+#TEST="$1"
+    while [ "$(pigs R $GPIO)" == "$1" ] #$TEST # [ "$(echo "$T1-$T0<$TIMEOUT" | bc)" -eq 1 ]
     do
+# sleep 0.00000
+:
+#TEST=[ "$(pigs R $GPIO)" == "$1" ]
 #        echo $T1 >> log.log
-        T1=$(date +%s%6N)
-        [ "$(pigs R $GPIO)" == "$1" ] && echo "$T1" && return 0
+#        T1=$(date +%s%6N)
+#        [ "$(pigs R $GPIO)" == "$1" ] && echo "$(date +%s%6N)" && return 0
     done
-    ExitNull
+  #  ExitNull
 }
 
-echo "Start" > log.log
-GetNext 1
-T_ZERO=$(GetNext 0)
-GetNext 1
-T_ONE=$(GetNext 0)
-echo "$T_ONE-$T_ZERO)*60/2"
+# echo "Start" > log.log
+# GetNext 0
+while :
+do
+# GetNext 1
+pigs WAIT "0x18" # EVTWT
+T_ZERO="$(date +%s%6N)" # $(GetNext 0)
+#GetNext 0
+pigs WAIT "0x18"
+#GetNext 1
+T_ONE="$(date +%s%6N)" # $(GetNext 0)
+# echo "$T_ONE-$T_ZERO)*60/2"
 RESULT=$(echo "scale=9;1000000/($T_ONE-$T_ZERO)*60/$PULSE" | bc)
 echo "Rpm: $RESULT"
+sleep 1
+done
 cat log.log

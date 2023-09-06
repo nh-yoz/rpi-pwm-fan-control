@@ -16,7 +16,7 @@ GPIO.setup(TACH, GPIO.IN, pull_up_down=GPIO.PUD_UP) # Pull up to 3.3V
 t = time.time()
 rpm = 0
 
-# Caculate pulse frequency and RPM
+# Calculate pulse frequency and RPM
 def fell(n):
     global t
     global rpm
@@ -28,8 +28,9 @@ def fell(n):
 
 # Add event to detect
 GPIO.add_event_detect(TACH, GPIO.FALLING, fell)
-
+print(GPIO.FALLING)
 try:
+    time.sleep(0.1)
     while True:
         print("%.f RPM" % rpm)
         rpm = 0

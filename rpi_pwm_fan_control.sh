@@ -68,7 +68,7 @@ while :
 do
     TEMP=$(GetTemp)
     DUTY="$(GetDuty $TEMP $DUTY)"
-    echo "$(date): pigs HP $GPIO $FREQ $DUTY | Temperature = ${TEMP}°C"
+    echo "$(date): pigs HP $GPIO $FREQ $DUTY | Temperature = ${TEMP}°C"> "$(realpath $0).log"
     pigs HP $GPIO $FREQ $DUTY
     sleep $REFRESH_RATE
 done
