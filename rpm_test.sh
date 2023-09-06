@@ -38,17 +38,23 @@ echo $GPIO_CHAR
 
 RESULT=$(for VALUE in ${LINES[@]}
 do
+    echo $VALUE
     if [[ $VALUE =~ ^[0-9]+$ ]]
     then
+        echo "Is value"
         T=$VALUE
     else
+        echo "Is not value"
         if [ $VALUE == "1$GPIO_CHAR" ]
         then
+            echo "Value is 1$GPIO_CHAR"
             if [ -v T0 ]
             then
+                echo "Variable T0 exists"
                 echo $(($T-$T1))
                 break
             else
+                echo "Variable T0 exists"
                 T0=$T
            fi
        fi
@@ -63,7 +69,7 @@ else
 fi
 
 # Cleaning up 
-rm -rf $TMP
+rm -f $TMP
 
 # cat $TMP
 
