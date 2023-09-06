@@ -24,9 +24,9 @@ PULSES_PER_REVOLUTION=2 # The number of pulses that are emitted per revolution o
 [ $# -gt 1 ] && echo "Zero or one parameter is allowed" && exit 1
 if [ $# -eq 1 ]
 then
-    TEST=$(echo "scale=4;$1>2*$SAMPLE_TIME" | bc)
+    $(echo "scale=4;$1>2*$SAMPLE_TIME" | bc)
     [ $? -ne 0 ] && echo "Parameter must be a valid number" && exit 2
-    [ $TEST -ne 1 ] && echo "Parameter must be greater than $SAMPLE_TIME*2" && exit 3
+    [ $(echo "scale=4;$1>2*$SAMPLE_TIME" | bc) -ne 1 ] && echo "Parameter must be greater than $SAMPLE_TIME*2" && exit 3
 fi
 
 # Get the caracter used by pig2vcd for the gpio (gpio 0-25 is A-Z, 26-51 is a-z
