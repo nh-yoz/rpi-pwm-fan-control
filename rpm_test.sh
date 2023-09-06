@@ -51,7 +51,7 @@ do
             if [ -v T0 ]
             then
                 echo "Variable T0 exists"
-                echo $(($T-$T1))
+                echo $(($T - $T1))
                 break
             else
                 echo "Variable T0 does not exist"
