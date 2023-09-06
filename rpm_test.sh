@@ -34,9 +34,9 @@ echo $GPIO_CHAR
 #do
 #    ((I+=1))
 #done
+echo "Lines in file: ${#LINES[@]}"
 
-
-RESULT=$(for VALUE in ${LINES[@]}
+for VALUE in ${LINES[@]}
 do
     echo $VALUE
     if [[ $VALUE =~ ^[0-9]+$ ]]
@@ -59,7 +59,8 @@ do
            fi
        fi
     fi
-done)
+done
+RESULT=""
 
 if [ $RESULT -gt 0 ]
 then 
