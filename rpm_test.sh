@@ -8,7 +8,8 @@ pigs nb $HANDLE $BIT && sleep $SAMPLE_TIME && pigs np $HANDLE
 
 TMP=$(mktemp)
 echo $TMP
-timeout 0.2 cat /dev/pigpio$HANDLE | pig2vcd > $TMP
+# timeout 0.2 cat /dev/pigpio$HANDLE | pig2vcd > $TMP
+timeout 0.2 cat /dev/pigpio$HANDLE | pig2vcd | sed '0,/1Y/d' | sed 's/[ #]//' > $TMP
 pigs nc $HANDLE
 
 # Remove all spaces and "#" in file
