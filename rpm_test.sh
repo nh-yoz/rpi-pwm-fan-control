@@ -86,9 +86,9 @@ fi
 
 # Delete temp-file
 rm -f $TMP
-echo $0
+
 while :
 do
     sleep 2
-    echo $($0)
+    printf $($0)
 done
