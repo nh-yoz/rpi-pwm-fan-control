@@ -54,6 +54,7 @@ FindTimeDiff() { # Read the file and print to stdout the timediff between two oc
 }
 
 while :
+do
     HANDLE=$(pigs no) # Get a handle for a new notification from pigs
 
     # Start notification, keep running for $SAMPLE_TIME seconds then pause de notification
