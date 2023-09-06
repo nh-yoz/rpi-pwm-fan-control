@@ -20,7 +20,7 @@ while IFS= read -r LINE; do
     LINES+=("$LINE")
 done < $TMP
 
-[ ${#LINES[@]} -eq 0 ] && echo "0 rpm" && rm -rf $TMP && exit 1
+[ ${#LINES[@]} -eq 0 ] && echo "File is empty" && rm -f $TMP && exit 1
 
 if [ $GPIO -le 25 ]
 then
