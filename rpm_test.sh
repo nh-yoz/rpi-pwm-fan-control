@@ -1,11 +1,27 @@
 #!/bin/bash
-GPIO=24
-SAMPLE_TIME="0.2" # seconds
+#
+########################################################################
+# FILENAME: ****.sh
+#
+# AUTHOR: Niklas HOOK
+#
+# DESCRIPTION: Script reading a fan's tachymeter connected to a raspberry GPIO and outputs the fan's speed in RPM
+#              The script uses the pigpio library (commands pigs and pig2vcd)
+#
+# OPTIONS: N/A
+#
+# Modifications (version | date | author | what):
+# 0 | 2023-08-30 | Niklas Hook | Creation
+########################################################################
+
+# Define constants
+GPIO=24 # The GPIO on which the fan's tachymeter is connected
+SAMPLE_TIME="0.2" # The time to acquire information from the tachymeter
 PULSES_PER_REVOLUTION=2 # The number of pulses that are emitted per revolution of the fan
 HANDLE=$(pigs no) # Get a handle for a new notification from pigs
-BIT=$((1 << $GPIO))
+BIT=$((1 << $GPIO)) # Create the bit-mask for the gpio. Gpio 5 -> 100000
 
-# Get the bit-mask for given GPIO
+# Get the caracter used by pig2vcd for the gpio (gpio 0-25 is A-Z, 26-51 is a-z
 if [ $GPIO -le 25 ]
 then
     GPIO_CHAR=$(printf "\\$(printf '%03o' $((65+$GPIO)))")
@@ -70,3 +86,9 @@ fi
 
 # Delete temp-file
 rm -f $TMP
+
+while :
+do
+    sleep 2
+    echo $($0)
+done
