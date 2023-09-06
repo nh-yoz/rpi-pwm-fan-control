@@ -16,14 +16,12 @@ pigs nb $HANDLE $BIT && sleep $SAMPLE_TIME && pigs np $HANDLE
 TMP=$(mktemp)
 # timeout 0.2 cat /dev/pigpio$HANDLE | pig2vcd > $TMP
 timeout 0.2 cat /dev/pigpio$HANDLE | pig2vcd > $TMP
-echo "#################"
-cat $TMP #| sed "0,/1$GPIO_CHAR/{/1$GPIO_CHAR/d;}" | sed 's/[ #]//' > $TMP
-sed -i "0,/1$GPIO_CHAR/{/1$GPIO_CHAR/d;}" $TMP
+sed -i "0,/.*1$GPIO_CHAR/{s/.*1$GPIO_CHAR//;}" $TMP
 sed -i 's/[ #]//' $TMP
 pigs nc $HANDLE
 
 # Remove all spaces and "#" in file
-echo "BEFORE REPLACING"
+# echo "BEFORE REPLACING"
 cat $TMP
 # sed -i 's/[ #]//' $TMP
 # echo "After substitution"
