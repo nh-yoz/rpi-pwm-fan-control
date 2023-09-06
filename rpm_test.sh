@@ -4,23 +4,30 @@ HANDLE=$(pigs no)
 BIT=$((1 << $GPIO))
 SAMPLE_TIME="0.2"
 
+if [ $GPIO -le 25 ]
+then
+    GPIO_CHAR=$(printf "\\$(printf '%03o' $((65+$GPIO)))")
+else
+    GPIO_CHAR=$(printf "\\$(printf '%03o' $((65+6+$GPIO)))")
+fi
+
 pigs nb $HANDLE $BIT && sleep $SAMPLE_TIME && pigs np $HANDLE
 
 TMP=$(mktemp)
 echo $TMP
 # timeout 0.2 cat /dev/pigpio$HANDLE | pig2vcd > $TMP
-timeout 0.2 cat /dev/pigpio$HANDLE | pig2vcd | sed '0,/1Y/d' | sed 's/[ #]//' > $TMP
+timeout 0.2 cat /dev/pigpio$HANDLE | pig2vcd | sed "0,/1$GPIO_CHAR/{/1$GPIO_CHAR/d;}" | sed 's/[ #]//' > $TMP
 pigs nc $HANDLE
 
 # Remove all spaces and "#" in file
 echo "BEFORE REPLACING"
 cat $TMP
-sed -i 's/[ #]//' $TMP
-echo "After substitution"
-cat $TMP
-sed -i '0,/1Y/d' $TMP
-echo "After deleting first part"
-cat $TMP
+# sed -i 's/[ #]//' $TMP
+# echo "After substitution"
+#cat $TMP
+#sed -i '0,/1Y/d' $TMP
+#echo "After deleting first part"
+#cat $TMP
 
 # Read the content to array
 LINES=()
@@ -30,12 +37,6 @@ done < $TMP
 
 [ ${#LINES[@]} -eq 0 ] && echo "File is empty" && rm -f $TMP && exit 1
 
-if [ $GPIO -le 25 ]
-then
-    GPIO_CHAR=$(printf "\\$(printf '%03o' $((65+$GPIO)))")
-else
-    GPIO_CHAR=$(printf "\\$(printf '%03o' $((65+6+$GPIO)))")
-fi
 
 FindTimeDiff() {
     RES=0
