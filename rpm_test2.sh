@@ -24,8 +24,7 @@ PULSES_PER_REVOLUTION=2 # The number of pulses that are emitted per revolution o
 [ $# -gt 1 ] && echo "Zero or one parameter is allowed" && exit 1
 if [ $# -eq 1 ]
 then
-    $(echo "scale=4;$1>2*$SAMPLE_TIME" | bc) > /dev/null
-    [ $? -ne 0 ] && echo "Parameter must be a valid number" && exit 2
+    [[ ! $1 =~ ^[0-9]+([.][0-9]+)?$ ]] && echo "Parameter must be a valid number" && exit 2
     [ $(echo "scale=4;$1>2*$SAMPLE_TIME" | bc) -ne 1 ] && echo "Parameter must be greater than $SAMPLE_TIME*2" && exit 3
 fi
 
