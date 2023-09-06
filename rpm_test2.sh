@@ -8,7 +8,8 @@
 # DESCRIPTION: Script reading a fan's tachymeter connected to a raspberry GPIO and outputs the fan's speed in RPM
 #              The script uses the pigpio library (commands pigs and pig2vcd)
 #
-# OPTIONS: N/A
+# OPTIONS:
+# - [value] : setting value will repeat the poll at this interval (value may be in decimal but must be at least 2 * $SAMPLE_TIME
 #
 # Modifications (version | date | author | what):
 # 0 | 2023-09-06 | Niklas Hook | Creation
@@ -18,7 +19,15 @@
 GPIO=24 # The GPIO on which the fan's tachymeter is connected
 SAMPLE_TIME="0.2" # The time to acquire information from the tachymeter
 PULSES_PER_REVOLUTION=2 # The number of pulses that are emitted per revolution of the fan
-BIT=$((1 << $GPIO)) # Create the bit-mask for the gpio. Gpio 5 -> 100000
+
+# Check options
+[ $# -gt 1 ] && echo "Zero or one parameter is allowed" && exit 1
+if [ $# -eq 1 ]
+then
+    TEST=$(echo "scale=4;$1>2*$SAMPLE_TIME" | bc)
+    [ $? -ne 0 ] && echo "Parameter must be a valid number" && exit 2
+    [ $TEST -ne 1 ] && echo "Parameter must be greater than $SAMPLE_TIME*2" && exit 3
+fi
 
 # Get the caracter used by pig2vcd for the gpio (gpio 0-25 is A-Z, 26-51 is a-z
 if [ $GPIO -le 25 ]
@@ -27,6 +36,8 @@ then
 else
     GPIO_CHAR=$(printf "\\$(printf '%03o' $((65+6+$GPIO)))")
 fi
+
+BIT=$((1 << $GPIO)) # Create the bit-mask for the gpio. Gpio 5 -> 100000
 
 FindTimeDiff() { # Read the file and print to stdout the timediff between two occurences of "1$GPIO_CHAR". If none, print 0.
     RES=0
