@@ -70,7 +70,7 @@ else
 fi
 
 # Cleaning up 
-rm -f $TMP
+echo $TMP # rm -f $TMP
 
 # cat $TMP
 
