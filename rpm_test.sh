@@ -67,7 +67,7 @@ if [ "$RESULT" == "0" ]
 then 
     echo "0 RPM"
 else 
-    echo "$(echo "1/(($RESULT)/1000000)*60/2" | bc) RPM"
+    echo "$(echo "1/($RESULT/1000000)*60/2" | bc) RPM"
 fi
 
 # Cleaning up 
