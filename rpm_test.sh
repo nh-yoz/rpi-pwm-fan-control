@@ -54,7 +54,7 @@ do
                 echo $(($T-$T1))
                 break
             else
-                echo "Variable T0 exists"
+                echo "Variable T0 does not exist"
                 T0=$T
            fi
        fi
