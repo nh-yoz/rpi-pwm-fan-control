@@ -20,6 +20,8 @@ while IFS= read -r LINE; do
     LINES+=("$LINE")
 done < $TMP
 
+[ ${#LINES[@]} -eq 0 ] && echo "0 rpm" && rm -rf $TMP && exit 1
+
 if [ $GPIO -le 25 ]
 then
     GPIO_CHAR=$(printf "\\$(printf '%03o' $((65+$GPIO)))")
@@ -33,7 +35,6 @@ echo $GPIO_CHAR
 #    ((I+=1))
 #done
 
-[ $I -eq ${#LINES[@]} ] && echo "0 rpm" && rm -rf $TMP && exit 1
 
 RESULT=$(for VALUE in ${LINES[@]}
 do
@@ -45,7 +46,7 @@ do
         then
             if [ -v T0 ]
             then
-                echo (($T-$T1))
+                echo $(($T-$T1))
                 break
             else
                 T0=$T
