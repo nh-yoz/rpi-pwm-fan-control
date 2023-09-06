@@ -68,7 +68,7 @@ then
     echo "0 RPM"
 else 
     echo "1/(${RESULT}/1000000)*60/2"
-    RES=$(echo "1/(${RESULT}/1000000)*60/2" | bc)
+    RES=$(echo "scale=10;1/(${RESULT}/1000000)*60/2" | bc)
     echo $RES RPM
 fi
 
