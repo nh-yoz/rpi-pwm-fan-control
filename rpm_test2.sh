@@ -88,6 +88,6 @@ while :
 
     # Delete temp-file
     rm -f $TMP
-    [ ! -v $1 ] && break
+    [ ! -v $1 ] && exit 0
     sleep $1
 done
