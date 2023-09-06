@@ -28,19 +28,11 @@ then
 else
     GPIO_CHAR=$(printf "\\$(printf '%03o' $((65+6+$GPIO)))")
 fi
-echo $GPIO_CHAR
-
-# while [ ! ${LINES[$I]} == "0$GPIO_CHAR" ] && [ $I -lt ${#LINES[@]} ]
-#do
-#    ((I+=1))
-#done
-echo "Lines in file: ${#LINES[@]}"
 
 FindTimeDiff() {
     RES=0
     for VALUE in ${LINES[@]}
     do
-        # echo $VALUE
         if [[ $VALUE =~ ^[0-9]+$ ]]
         then
             T=$VALUE
@@ -49,7 +41,6 @@ FindTimeDiff() {
             then
                 if [ -v T0 ]
                 then
-                    # echo $(($T-$T0))
                     RES=$(($T-$T0))
                     break
                 else
@@ -61,15 +52,12 @@ FindTimeDiff() {
     echo $RES
 }
 RESULT=$(FindTimeDiff)
-echo "Result is: $RESULT ms"
 
 if [ "$RESULT" == "0" ]
 then 
     echo "0 RPM"
 else 
-    echo "1/(${RESULT}/1000000)*60/2"
-    RES=$(echo "scale=10;1/(${RESULT}/1000000)*60/2" | bc)
-    echo $RES RPM
+    echo "$(echo "scale=10;1/(${RESULT}/1000000)*60/2" | bc) RPM"
 fi
 
 # Cleaning up 
