@@ -1,17 +1,14 @@
 #!/bin/bash
-
 GPIO=24
-
 HANDLE=$(pigs no)
-
 BIT=$((1 << $GPIO))
+SAMPLE_TIME="0.2"
 
-pigs nb $HANDLE $BIT && sleep 0.2 && pigs np $HANDLE
+pigs nb $HANDLE $BIT && sleep $SAMPLE_TIME && pigs np $HANDLE
 
 TMP=$(mktemp)
 echo $TMP
 timeout 0.2 cat /dev/pigpio$HANDLE | pig2vcd > $TMP
-
 pigs nc $HANDLE
 
 # Remove all spaces and "#" in file
@@ -30,44 +27,44 @@ else
     GPIO_CHAR=$(printf "\\$(printf '%03o' $((65+6+$GPIO)))")
 fi
 echo $GPIO_CHAR
-I=0
-while [ ! ${LINES[$I]} == "0$GPIO_CHAR" ] && [ $I -lt ${#LINES[@]} ]
-do
-    ((I+=1))
-done
 
-[ $I -eq ${#LINES[@]} ] && echo "0 rpm" && exit
+# while [ ! ${LINES[$I]} == "0$GPIO_CHAR" ] && [ $I -lt ${#LINES[@]} ]
+#do
+#    ((I+=1))
+#done
 
-STOP=0
-while [ $I -lt ${#LINES[@]} ] && [ STOP -eq 0 ]
+[ $I -eq ${#LINES[@]} ] && echo "0 rpm" && rm -rf $TMP && exit 1
+
+RESULT=$(for VALUE in ${LINES[@]}
 do
-    VAL=${LINES[$I]}
-    if [[ $VAL =~ ^[0-9]+$ ]]
+    if [[ $VALUE =~ ^[0-9]+$ ]]
     then
-        T=$VAL
+        T=$VALUE
     else
-        if [ $VAL == "1$GPIO_CHAR" ]
+        if [ $VALUE == "1$GPIO_CHAR" ]
         then
-           if [ -v T0 ]
-           then
-               T1=$T
-echo $T1
-               STOP=1
-           else
-               T0=$T
-echo $T0
+            if [ -v T0 ]
+            then
+                echo (($T-$T1))
+                break
+            else
+                T0=$T
            fi
        fi
     fi
-done
-if [ -v T0 ] && [ -v T1 ]
-then
-   RESULT=$(echo "1/(($T1-$T0)/1000000)*60/2" | bc)
-   echo "$RESULT RPM"
-else
-   echo "0 RPM" && exit
+done)
+
+if [ $RESULT -gt 0 ]
+then 
+    echo "$(echo "1/(($T1-$T0)/1000000)*60/2" | bc) RPM"
+else 
+    echo "0 RPM"
 fi
-cat $TMP
+
+# Cleaning up 
+rm -rf $TMP
+
+# cat $TMP
 
 # Replace all spaces in file
 
@@ -79,4 +76,3 @@ cat $TMP
 
 # RPM=$(echo "1/(($T1-$T0)/1000000)*60/2" | bc)
 
-rm -rf $TMP
