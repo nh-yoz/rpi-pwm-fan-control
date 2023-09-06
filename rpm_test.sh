@@ -20,6 +20,7 @@ pigs nb $HANDLE $BIT && sleep $SAMPLE_TIME && pigs np $HANDLE
 TMP=$(mktemp)
 
 # Convert notification to readable using the command "pig2vcd", remove header and "#" in front of microseconds and write to temp-file
+# The notification file is a pipe -> put a timeout
 timeout 0.2 cat /dev/pigpio$HANDLE | pig2vcd | sed "0,/0$GPIO_CHAR/d" | sed 's/[ #]//' > $TMP 
 
 # Close the notification
