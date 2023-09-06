@@ -16,7 +16,7 @@ pigs nb $HANDLE $BIT && sleep $SAMPLE_TIME && pigs np $HANDLE
 TMP=$(mktemp)
 # timeout 0.2 cat /dev/pigpio$HANDLE | pig2vcd > $TMP
 timeout 0.2 cat /dev/pigpio$HANDLE | pig2vcd > $TMP
-sed -i "0,/.*1$GPIO_CHAR/{s/.*1$GPIO_CHAR//;}" $TMP
+sed -i "1,/.*1$GPIO_CHAR/{s/.*1$GPIO_CHAR//;}" $TMP
 sed -i 's/[ #]//' $TMP
 pigs nc $HANDLE
 
