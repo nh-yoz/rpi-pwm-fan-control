@@ -63,11 +63,11 @@ FindTimeDiff() {
 RESULT=$(FindTimeDiff)
 echo "Result is: $RESULT"
 
-if [ $RESULT -gt 0 ]
+if [ "$RESULT" == "0" ]
 then 
-    echo "$(echo "1/(($T1-$T0)/1000000)*60/2" | bc) RPM"
-else 
     echo "0 RPM"
+else 
+    echo "$(echo "1/(($RESULT)/1000000)*60/2" | bc) RPM"
 fi
 
 # Cleaning up 
