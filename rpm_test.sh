@@ -12,9 +12,12 @@ timeout 0.2 cat /dev/pigpio$HANDLE | pig2vcd > $TMP
 pigs nc $HANDLE
 
 # Remove all spaces and "#" in file
+echo "BEFORE REPLACING"
 cat $TMP
-sed -i 's/[ #]/' $TMP
+sed -i 's/[ #]//' $TMP
+echo "After substitution"
 sed -i '0,/1Y/d' $TMP
+echo "After deleting first part"
 cat $TMP
 
 # Read the content to array
