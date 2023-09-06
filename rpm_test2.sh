@@ -87,6 +87,7 @@ do
     done < $TMP
 
     RESULT=$(FindTimeDiff)
+    
     if [ "$RESULT" == "0" ]
     then 
         # No state change -> problem or fan stalled
@@ -99,6 +100,6 @@ do
 
     # Delete temp-file
     rm -f $TMP
-    [ $# -eq 0 ] && exit 0
+    [ $# -eq 0 ] && exit 0 # If no parameter is given, exit
     sleep $1
 done
