@@ -61,6 +61,7 @@ FindTimeDiff() {
     echo $RES
 }
 RESULT=$(FindTimeDiff)
+echo "Result is: $RESULT"
 
 if [ $RESULT -gt 0 ]
 then 
