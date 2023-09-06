@@ -12,8 +12,10 @@ timeout 0.2 cat /dev/pigpio$HANDLE | pig2vcd > $TMP
 pigs nc $HANDLE
 
 # Remove all spaces and "#" in file
-sed -i 's/[ #]//g' $TMP
-sed -i '0,/1Y/{s/[1Y]}/' $TMP
+cat $TMP
+sed -i 's/[ #]/' $TMP
+sed -i '0,/1Y/d' $TMP
+cat $TMP
 
 # Read the content to array
 LINES=()
