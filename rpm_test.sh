@@ -13,7 +13,7 @@ pigs nc $HANDLE
 
 # Remove all spaces and "#" in file
 sed -i 's/[ #]//g' $TMP
-sed -i 's/[1Y]//' $TMP
+sed -i '0,/1Y/{s/[1Y]}/' $TMP
 
 # Read the content to array
 LINES=()
