@@ -63,7 +63,7 @@ then
     echo "0 RPM"
 else 
     RESULT=$(echo "scale=10;1/($RESULT/1000000)*60/$PULSES_PER_REVOLUTION" | bc) # get the rpm (with decimals)
-    RESULT=$(echo "$RESULT/1" | bc)) # Truncate value
+    RESULT=$(echo "$RESULT/1" | bc) # Truncate value
     echo $RESULT
 fi
 
