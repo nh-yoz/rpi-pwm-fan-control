@@ -14,10 +14,12 @@ fi
 pigs nb $HANDLE $BIT && sleep $SAMPLE_TIME && pigs np $HANDLE
 
 TMP=$(mktemp)
-# timeout 0.2 cat /dev/pigpio$HANDLE | pig2vcd > $TMP
 timeout 0.2 cat /dev/pigpio$HANDLE | pig2vcd > $TMP
 sed -i "0,/0$GPIO_CHAR/d" $TMP
 sed -i 's/[ #]//' $TMP
+
+timeout 0.2 cat /dev/pigpio$HANDLE | pig2vcd | sed "0,/0$GPIO_CHAR/d" | sed 's/[ #]//' > $TMP 
+
 pigs nc $HANDLE
 
 # Remove all spaces and "#" in file
