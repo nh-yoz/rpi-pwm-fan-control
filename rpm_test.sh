@@ -17,7 +17,7 @@ TMP=$(mktemp)
 # timeout 0.2 cat /dev/pigpio$HANDLE | pig2vcd > $TMP
 timeout 0.2 cat /dev/pigpio$HANDLE | pig2vcd
 echo "#################"
-timeout 0.2 cat /dev/pigpio$HANDLE | pig2vcd | sed "0,/1$GPIO_CHAR/{/1$GPIO_CHAR/d;}" | sed 's/[ #]//' > $TMP
+timeout 0.2 cat /dev/pigpio$HANDLE | pig2vcd | sed "0,/1$GPIO_CHAR/{/1$GPIO_CHAR/d;}" | sed 's/[ #]//'
 pigs nc $HANDLE
 
 # Remove all spaces and "#" in file
