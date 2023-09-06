@@ -16,6 +16,7 @@ echo "BEFORE REPLACING"
 cat $TMP
 sed -i 's/[ #]//' $TMP
 echo "After substitution"
+cat $TMP
 sed -i '0,/1Y/d' $TMP
 echo "After deleting first part"
 cat $TMP
