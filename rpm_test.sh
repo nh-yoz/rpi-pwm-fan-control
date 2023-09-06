@@ -36,26 +36,31 @@ echo $GPIO_CHAR
 #done
 echo "Lines in file: ${#LINES[@]}"
 
-RESULT=$(for VALUE in ${LINES[@]}
-do
-    # echo $VALUE
-    if [[ $VALUE =~ ^[0-9]+$ ]]
-    then
-        T=$VALUE
-    else
-        if [ $VALUE == "1$GPIO_CHAR" ]
+FindTimeDiff() {
+    RES=0
+    for VALUE in ${LINES[@]}
+    do
+        # echo $VALUE
+        if [[ $VALUE =~ ^[0-9]+$ ]]
         then
-            if [ -v T0 ]
+            T=$VALUE
+        else
+            if [ $VALUE == "1$GPIO_CHAR" ]
             then
-                echo $(($T-$T0))
-                break
-            else
-                T0=$T
+                if [ -v T0 ]
+                then
+                    echo $(($T-$T0))
+                    RES=$(($T-$T0))
+                    break
+                else
+                    T0=$T
+               fi
            fi
-       fi
-    fi
-done)
-# RESULT=""
+        fi
+    done
+    echo $RES
+}
+RESULT=$(FindTimeDiff)
 
 if [ $RESULT -gt 0 ]
 then 
