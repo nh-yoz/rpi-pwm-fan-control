@@ -36,31 +36,31 @@ echo $GPIO_CHAR
 #done
 echo "Lines in file: ${#LINES[@]}"
 
-for VALUE in ${LINES[@]}
+RESULT=$(for VALUE in ${LINES[@]}
 do
-    echo $VALUE
+    # echo $VALUE
     if [[ $VALUE =~ ^[0-9]+$ ]]
     then
-        echo "Is value"
+        # echo "Is value"
         T=$VALUE
     else
-        echo "Is not value"
+        # echo "Is not value"
         if [ $VALUE == "1$GPIO_CHAR" ]
         then
-            echo "Value is 1$GPIO_CHAR"
+            # echo "Value is 1$GPIO_CHAR"
             if [ -v T0 ]
             then
-                echo "Variable T0 exists"
+                # echo "Variable T0 exists"
                 echo $(($T-$T0))
                 break
             else
-                echo "Variable T0 does not exist"
+                # echo "Variable T0 does not exist"
                 T0=$T
            fi
        fi
     fi
-done
-RESULT=""
+done)
+# RESULT=""
 
 if [ $RESULT -gt 0 ]
 then 
