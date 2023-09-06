@@ -64,8 +64,10 @@ then
 else 
     RESULT=$(echo "scale=10;1/($RESULT/1000000)*60/$PULSES_PER_REVOLUTION" | bc) # get the rpm (with decimals)
     RESULT=$(echo "$RESULT/1" | bc) # Truncate value
+    echo "Result"
     echo $RESULT
 fi
 
 # Delete temp-file
 rm -f $TMP
+echo "end script"
