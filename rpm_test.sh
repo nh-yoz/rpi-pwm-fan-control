@@ -49,7 +49,7 @@ FindTimeDiff() {
             then
                 if [ -v T0 ]
                 then
-                    echo $(($T-$T0))
+                    # echo $(($T-$T0))
                     RES=$(($T-$T0))
                     break
                 else
