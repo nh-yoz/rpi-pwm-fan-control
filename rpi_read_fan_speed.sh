@@ -95,15 +95,13 @@ do
 
     RESULT=$(FindTimeDiff)
     
-    if [ "$RESULT" == "0" ]
-    then 
-        # No state change -> problem or fan stalled
-        echo "0 RPM"
-    else 
+    if [ "$RESULT" != "0" ]
+    then # Fan is running
         RESULT=$(echo "scale=10;1/($RESULT/1000000)*60/$PULSES_PER_REVOLUTION" | bc) # get the rpm (with decimals)
         RESULT=$(echo "$RESULT/1" | bc) # Truncate value
-        echo "$RESULT RPM"
     fi
+
+    echo "$(date '+%Y-%m-%d %Hh%Mm%Ss'); Fan speed: $RESULT RPM" 
 
     # Delete temp-file
     rm -f $TMP
