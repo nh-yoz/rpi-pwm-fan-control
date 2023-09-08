@@ -68,7 +68,6 @@ while :
 do
     TEMP=$(GetTemp)
     DUTY="$(GetDuty $TEMP $DUTY)"
-    # echo "$(date): pigs HP $GPIO $FREQ $DUTY | Temperature = ${TEMP}°C" > "$(realpath $0).log"
     echo "$(date '+%Y-%m-%d %Hh%Mm%Ss'); Temperature: ${TEMP} °C; GPIO: $GPIO; Frequency: ${FREQ} Hz; Duty: $(echo "$DUTY/10000" | bc)%; Command: pigs HP $GPIO $FREQ $DUTY" > "$(realpath $0).log"
     pigs HP $GPIO $FREQ $DUTY
     sleep $REFRESH_RATE
