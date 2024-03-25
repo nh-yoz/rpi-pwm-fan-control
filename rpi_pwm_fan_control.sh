@@ -20,13 +20,14 @@ TEMP_SENSOR=1 # Where to get the temperature from (0: GPU temperature; <>0: CPU 
 
 # Setting soft constants (ONLY INTEGERS)
 REFRESH_RATE=5 # In seconds (how often should the speed be set)
-MIN_TEMP=45 # Minumum temperature (°C) at which the fan starts running at MIN_DUTY
+MIN_TEMP=55 # Minumum temperature (°C) at which the fan starts running at MIN_DUTY
 MAX_TEMP=80 # Maximum temperature (°C) at which the fan starts running at MAX_DUTY
 MIN_DUTY=20 # Minimum speed of the fan (%). Value between 0 and 100. Must be lower or equal to MAX_DUTY. If the value is too low (ie < 10) the fan may not spin.
 MAX_DUTY=100 # Maximum speed of the fan (%). Value between 0 and 100.Must be higher or equal to MIN_DUTY.
 DO_STOP=1 # If temperature is below $MIN_TEMP, should fan be stopped (0: false, <>0: true)? This has no effect if the MIN_DUTY=0.
 HYSTERESIS=10 # If fan is stopped because DO_STOP=1 and temperature<MIN_TEMP, don't restart fan until temperature>(MIN_TEMP+HYSTERESIS)
 DUTY_ON_EXIT=50 # When script is terminated (SIGINT), set the speed of the fan to this value (%). Value must at most be 100. If negative (<0), the gpio pin will be set to mode "INPUT" which will release the hardware PWM control.
+LOG_LENGTH=8640 # Number of lines to keep in logfile (8640 = 12 hours with refreshrate of 5 s)
 
 GetTemp() { # Prints to stdout the temperature in °C with decimals
     if [ $TEMP_SENSOR -eq 0 ]
@@ -63,12 +64,14 @@ DoExit() {
 trap "DoExit" EXIT
 
 DUTY=0
+LOGFILE="$(realpath ${0}).log"
 
 while :
 do
     TEMP=$(GetTemp)
     DUTY="$(GetDuty $TEMP $DUTY)"
-    echo "$(date '+%Y-%m-%d %Hh%Mm%Ss'); Temperature: ${TEMP} °C; GPIO: $GPIO; Frequency: ${FREQ} Hz; Duty: $(echo "$DUTY/10000" | bc)%; Command: pigs HP $GPIO $FREQ $DUTY" > "$(realpath $0).log"
+    echo "$(date '+%Y-%m-%d %Hh%Mm%Ss'); Temperature: ${TEMP} °C; GPIO: $GPIO; Frequency: ${FREQ} Hz; Duty: $(echo "$DUTY/10000" | bc)%; Command: pigs HP $GPIO $FREQ $DUTY" | tee -a "${LOGFILE}"
+    sed -i "1,$(($(wc -l < ${LOGFILE})-${LOG_LENGTH}))d" "${LOGFILE}"
     pigs HP $GPIO $FREQ $DUTY
     sleep $REFRESH_RATE
 done
